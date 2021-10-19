@@ -27,7 +27,8 @@ void CheckMode(uint8_t keyvalue)
 	   case 0x40: //POWER ON and off
 	            run_t.Power_On=0;
 				run_t.lampColor = 0x40;
-					
+				 run_t.eusartTx_flag=0;
+		         run_t.eusartTx_Num=0;	
 					
 	  break;
    
@@ -253,15 +254,17 @@ void EUSART_InputCmd_Run(void)
 	if(run_t.InputOrder[0]=='W'){
 		
 		ChargingBattery_Status();
+		//TX1REG = 'W';
 	}	
 	else if(run_t.InputOrder[0]=='T'){
-		ChargingBattery_Status();
+		  ChargingBattery_Status();
+		 // TX1REG = 'T';
 		
 	}
    else if(run_t.InputOrder[0]=='A'){
 		
 		AdapterWorks_Status();
-		
+		//TX1REG = 'A';
 	}
 	
 }
@@ -270,7 +273,7 @@ static void ChargingBattery_Status(void)
 {
 	switch(run_t.InputOrder[1]){
 
-         case battery_20://detected low votlage don't run
+         case 0x1://detected low votlage don't run
 			   if(tim0_t.tim0_falg >49){
 					LED_40_SetHigh() ;
 					LED_60_SetHigh();
@@ -290,7 +293,7 @@ static void ChargingBattery_Status(void)
 		 
 		 break;
 
-		 case battery_40: //40% battery power
+		 case 0x2: //60% battery power
 		    if(run_t.batteryStatus==2){
 				if(tim0_t.tim0_falg >49){
 					LED_40_SetHigh() ;
@@ -311,7 +314,7 @@ static void ChargingBattery_Status(void)
          
 		 break;
 
-		 case battery_60:
+		 case 0x3://80%
 			 if(run_t.batteryStatus==2){
 					if(tim0_t.tim0_falg >49){
 						LED_60_SetHigh() ;
@@ -333,7 +336,7 @@ static void ChargingBattery_Status(void)
 
 		 break;
 
-		 case battery_80:
+		 case 0x4: //90%
 			 if(run_t.batteryStatus==2){
 				if(tim0_t.tim0_falg >49){
 					LED_80_SetHigh() ;
@@ -356,7 +359,7 @@ static void ChargingBattery_Status(void)
 
 		 break;
 
-		 case battery_100: //WT.EDIT 2021.09.23
+		 case 0X5: //100% WT.EDIT 2021.09.23
 			 if(run_t.batteryStatus==2){
 				if(tim0_t.tim0_falg >49){
 					LED_100_SetHigh() ;
@@ -376,7 +379,7 @@ static void ChargingBattery_Status(void)
 			
 		 break;
 		 
-		case battery_full:
+		case 0x6:
 		
 		    LED_100_SetLow() ;
 		    LED_40_SetLow();

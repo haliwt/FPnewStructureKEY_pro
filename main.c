@@ -71,12 +71,13 @@ void main(void)
     while (1)
     {
        // Add your application code
-       EUSART_SetRxInterruptHandler(RxData_EUSART);
-       EUSART_InputCmd_Run();
+      
        
        keyValue = KEY_Scan();
        CheckMode(keyValue);
        CheckRun();
+       EUSART_SetRxInterruptHandler(RxData_EUSART);
+       EUSART_InputCmd_Run();
     }
 }
 /**

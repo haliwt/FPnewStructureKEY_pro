@@ -356,7 +356,7 @@ void RxData_EUSART(void)
         PIE3bits.TX1IE = 0;
 		if(i==0){
 			
-			if(inputBuf[0]=='B'){
+			if(inputBuf[0]=='B'){ //0X42
 	            // TX1REG = inputBuf[0];//recdata[i]; // ???????? // ??
                  
 			}
@@ -364,38 +364,38 @@ void RxData_EUSART(void)
 		}
 		else if(i==1){
             
-	        if(inputBuf[1]=='A'){
+	        if(inputBuf[1]=='A'){ //0X41
 	           //  TX1REG = inputBuf[1];//recdata[i]; // ???????? // ??
             }
             else i=0;
 		}
         else if(i==2){
-            if(inputBuf[2]=='T'){
+            if(inputBuf[2]=='T'){ //0X54
 	           //  TX1REG = inputBuf[1];//recdata[i]; // ???????? // ??
             }
             else i=0;
             
         }
 		else if(i==3){
-            if(inputBuf[2]=='W'){ //battery
+            if(inputBuf[2]=='W'){ //0X57//battery
 	           //  TX1REG = inputBuf[1];//recdata[i]; // ???????? // ??
                 run_t.InputOrder[0]=inputBuf[3];
                 run_t.batteryStatus = 1;
             }
-            else if(inputBuf[2]=='T'){ //battery + adapter
+            else if(inputBuf[2]=='T'){//0X54 //battery + adapter
                  run_t.InputOrder[0]=inputBuf[3];
                  run_t.batteryStatus =2 ;
             }
-              else if(inputBuf[2]=='A'){ //adapter
+              else if(inputBuf[2]=='A'){ //0X41//adapter
                  run_t.InputOrder[0]=inputBuf[3];
-            }
-            else i=0;
-	        // TX1REG = inputBuf[2];//recdata[i]; // ???????? // ??
+                }
+                else i=0;
+	            // TX1REG = inputBuf[2];//recdata[i]; // ???????? // ??
             
         }
         else if(i==4){
             
-            run_t.InputOrder[1]=inputBuf[3];
+            run_t.InputOrder[1]=inputBuf[4]-0x30;
             
         }
 	    i++;
