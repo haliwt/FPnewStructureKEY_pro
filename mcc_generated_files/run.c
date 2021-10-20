@@ -1,5 +1,5 @@
 #include "run.h"
-
+static void BatteryWorks_Status(void);
 static void ChargingBattery_Status(void);
 static void AdapterWorks_Status(void);
 /***************************************************************************
@@ -12,7 +12,7 @@ static void AdapterWorks_Status(void);
 ****************************************************************************/
 void CheckMode(uint8_t keyvalue)
 {
-	static uint16_t i=0;
+	static uint8_t powerFirst_flag=0;
     static uint8_t    	inputkey_red,inputkey_green,inputkey_blue,inputkey_white;
 
 	switch(keyvalue){
@@ -25,10 +25,19 @@ void CheckMode(uint8_t keyvalue)
 	   break;
 	   
 	   case 0x40: //POWER ON and off
+	          powerFirst_flag = powerFirst_flag ^ 0x1;
+	          if(powerFirst_flag ==1){
+				  
+				  return ;
+				  
+			  }
+			  else{
+			  
 	            run_t.Power_On=0;
 				run_t.lampColor = 0x40;
 				 run_t.eusartTx_flag=0;
 		         run_t.eusartTx_Num=0;	
+	          }
 					
 	  break;
    
@@ -253,7 +262,7 @@ void EUSART_InputCmd_Run(void)
 
 	if(run_t.InputOrder[0]=='W'){
 		
-		ChargingBattery_Status();
+		BatteryWorks_Status();//ChargingBattery_Status();
 		//TX1REG = 'W';
 	}	
 	else if(run_t.InputOrder[0]=='T'){
@@ -268,7 +277,97 @@ void EUSART_InputCmd_Run(void)
 	}
 	
 }
+static void BatteryWorks_Status(void)
+{
+	switch(run_t.InputOrder[1]){
 
+         case 0x1://detected low votlage don't run
+			   if(tim0_t.tim0_falg >49){
+					LED_40_SetHigh() ;
+					LED_60_SetHigh();
+					LED_80_SetHigh();
+					LED_100_SetHigh();
+					if(tim0_t.tim0_falg >99)
+						tim0_t.tim0_falg = 0;
+				}
+				else{
+					LED_100_SetLow() ;
+					LED_40_SetLow();
+					LED_60_SetLow();
+					LED_80_SetLow();
+		
+				}
+			
+		 
+		 break;
+
+		 case 0x2: //60% battery power
+	
+			LED_40_SetLow() ;
+			
+			LED_60_SetHigh();
+		    LED_80_SetHigh();
+			LED_100_SetHigh();
+         
+		 break;
+
+		 case 0x3://80%
+		
+			LED_60_SetLow() ;
+			
+			LED_40_SetLow() ;
+		
+		    LED_80_SetHigh();
+			LED_100_SetHigh();
+
+		 break;
+
+		 case 0x4: //90%
+	
+			LED_80_SetLow() ;
+
+		   
+			LED_40_SetLow() ;
+			LED_60_SetLow();
+			LED_100_SetHigh();
+			
+		 
+
+		 break;
+
+		 case 0X5: //100% WT.EDIT 2021.09.23
+		
+			LED_100_SetLow() ;
+            
+			LED_40_SetLow() ;
+			LED_60_SetLow();
+			LED_80_SetLow();
+			
+		 break;
+		 
+		case 0x6:
+		
+		    LED_100_SetLow() ;
+		    LED_40_SetLow();
+			LED_60_SetLow();
+		    LED_80_SetLow();
+		    
+		
+		break;
+
+		
+
+		 default :
+		 	 
+
+		 break;
+
+
+
+    }
+	
+	
+}
 static void ChargingBattery_Status(void)
 {
 	switch(run_t.InputOrder[1]){
@@ -294,7 +393,7 @@ static void ChargingBattery_Status(void)
 		 break;
 
 		 case 0x2: //60% battery power
-		    if(run_t.batteryStatus==2){
+		    if(run_t.batteryStatus==1){
 				if(tim0_t.tim0_falg >49){
 					LED_40_SetHigh() ;
 					if(tim0_t.tim0_falg >99)
@@ -315,7 +414,7 @@ static void ChargingBattery_Status(void)
 		 break;
 
 		 case 0x3://80%
-			 if(run_t.batteryStatus==2){
+			 if(run_t.batteryStatus==1){
 					if(tim0_t.tim0_falg >49){
 						LED_60_SetHigh() ;
 						if(tim0_t.tim0_falg >99)
@@ -337,7 +436,7 @@ static void ChargingBattery_Status(void)
 		 break;
 
 		 case 0x4: //90%
-			 if(run_t.batteryStatus==2){
+			 if(run_t.batteryStatus==1){
 				if(tim0_t.tim0_falg >49){
 					LED_80_SetHigh() ;
 					if(tim0_t.tim0_falg >99)
@@ -360,7 +459,7 @@ static void ChargingBattery_Status(void)
 		 break;
 
 		 case 0X5: //100% WT.EDIT 2021.09.23
-			 if(run_t.batteryStatus==2){
+			 if(run_t.batteryStatus==1){
 				if(tim0_t.tim0_falg >49){
 					LED_100_SetHigh() ;
 					if(tim0_t.tim0_falg >99)

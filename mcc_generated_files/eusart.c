@@ -380,16 +380,16 @@ void RxData_EUSART(void)
             if(inputBuf[2]=='W'){ //0X57//battery
 	           //  TX1REG = inputBuf[1];//recdata[i]; // ???????? // ??
                 run_t.InputOrder[0]=inputBuf[3];
-                run_t.batteryStatus = 1;
+                run_t.batteryStatus = 0;
             }
             else if(inputBuf[2]=='T'){//0X54 //battery + adapter
                  run_t.InputOrder[0]=inputBuf[3];
-                 run_t.batteryStatus =2 ;
+                 run_t.batteryStatus =1 ;
             }
-              else if(inputBuf[2]=='A'){ //0X41//adapter
+            else if(inputBuf[2]=='A'){ //0X41//adapter
                  run_t.InputOrder[0]=inputBuf[3];
-                }
-                else i=0;
+            }
+            else i=0;
 	            // TX1REG = inputBuf[2];//recdata[i]; // ???????? // ??
             
         }
