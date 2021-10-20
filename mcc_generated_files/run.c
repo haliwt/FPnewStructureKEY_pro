@@ -200,7 +200,7 @@ void CheckRun(void)
                     
                }
 			 DELAY_microseconds(5);
-			 EUSART_TxData(0X20);
+			 EUSART_TxData(0X02);
                firstflag=0;
              
                
@@ -216,7 +216,7 @@ void CheckRun(void)
 				
                     
            }
-		 EUSART_TxData(0X10);
+		 EUSART_TxData(0X01);
          DELAY_microseconds(5);
            firstflag=0;
            
