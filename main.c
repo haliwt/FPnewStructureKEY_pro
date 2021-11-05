@@ -50,6 +50,7 @@ void main(void)
 {
     // Initialize the device
     uint8_t keyValue;
+    static uint8_t tm;
     SYSTEM_Initialize();
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts
@@ -72,12 +73,66 @@ void main(void)
     {
        // Add your application code
       
-       
-       keyValue = KEY_Scan();
-       CheckMode(keyValue);
-       CheckRun();
-       EUSART_SetRxInterruptHandler(RxData_EUSART);
-       EUSART_InputCmd_Run();
+       if(Adapter_DetectedGetValue() ==1){//Adapter  if not -> 1. has + battery charging
+                if(led_t.switch_dev==0 ){ //Display Battery of capacity
+                  if(tim0_t.tim0_noBatt_s>120 ){
+                       led_t.switch_dev++;
+                  }  
+                        Battery_Detected(); //
+                        DisplayBattery_Power_Estimate();
+                   
+                }
+                if(tim0_t.tim0_noBatt_s>240){ //4 minute
+                    tim0_t.tim0_noBatt_s=0; 
+                    Battery_Detected(); //  
+                  if(led_t.gbatteryQuantity ==1){//has a battery + charing     
+                    DisplayBattery_Power_Estimate();
+                  }
+                  else{ //han't battery ->LED lamp all turn on
+                      Adapter_Indicator();
+                  }
+                }    
+        }
+        else{ // hasn't adapter only battery works
+         
+           if(tim0_t.getMinutes15_flag ==1){ 
+                led_t.minute15_flag =1;
+                TurnOff_Lamp();
+                  tm++;
+                  if(tm<5){
+                    run_t.eusartTx_flag=0;
+                    run_t.eusartTx_Num=0;
+                    EUSART_TxData(0xff);
+                  }
+                  if(tm >5)tm=7;
+
+            }
+            else{
+              if(led_t.switch_dev==0 ){ //Display Battery of capacity
+                  if(tim0_t.tim0_noBatt_s>120 ){
+                       led_t.switch_dev++;
+                  }
+                    Battery_Detected(); //    
+                    DisplayBattery_Power_Estimate();
+                
+              }
+              if(tim0_t.tim0_noBatt_s>180){  //180s detected battery qunantity and update LED 
+                  tim0_t.tim0_noBatt_s=0;
+                  Battery_Detected(); //   
+                  DisplayBattery_Power_Estimate();
+                 
+              }
+            }
+            
+               
+         }
+       if(led_t.minute15_flag ==0){
+          keyValue = KEY_Scan();
+          CheckMode(keyValue);
+          CheckRun();
+          EUSART_SetRxInterruptHandler(RxData_EUSART);
+          EUSART_InputCmd_Run();
+       }
     }
 }
 /**

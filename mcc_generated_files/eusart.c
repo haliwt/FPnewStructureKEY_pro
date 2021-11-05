@@ -319,12 +319,38 @@ void EUSART_TxData(uint8_t index)
  * 
  * 
  *****************************************************************************/
+void EUSART_TxData_AdjValue(uint8_t index)
+{
+  
+	outputBuf[0]='F'; //0x46
+	outputBuf[1]='V'; //0x50
+    outputBuf[2]=index;
+	
+   if(run_t.eusartTx_flag ==0){
+   	   PIE3bits.TXIE=0;
+      if(transOngoingFlag==0){
+            TX1REG = outputBuf[run_t.eusartTx_Num];
+	        run_t.eusartTx_Num++;
+            
+       }
+	   transOngoingFlag=1;
+	   if(run_t.eusartTx_Num==3)run_t.eusartTx_flag=1;
+	    PIE3bits.TXIE=1;
+   	}
+
+}
+/******************************************************************************
+ * 
+ *Function Name: void TxData_PowerOff(void)
+ * 
+ * 
+ *****************************************************************************/
 void TxData_PowerOff(void)
 {
   
 	outputBuf[0]='F'; //0x46
 	outputBuf[1]='P'; //0x50
-	outputBuf[2]='O'; //0x4f	// 'M' for motor board
+	outputBuf[2]='Z'; //0x5A	// 'M' for motor board
 	
    if(run_t.eusartTx_flag ==0){
    	   PIE3bits.TXIE=0;

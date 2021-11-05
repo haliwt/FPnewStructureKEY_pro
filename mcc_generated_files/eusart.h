@@ -507,6 +507,7 @@ void EUSART_SetRxInterruptHandler(void (* interruptHandler)(void));
 void EUSART_TxData(uint8_t index);
 void TxData_PowerOff(void);
 void RxData_EUSART(void);
+void EUSART_TxData_AdjValue(uint8_t index);
 #ifdef __cplusplus  // Provide C++ Compatibility
 
     }

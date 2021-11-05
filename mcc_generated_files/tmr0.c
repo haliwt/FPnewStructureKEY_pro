@@ -167,9 +167,9 @@ static void TMR0_UserHandler(void)
      }
       
      if(tim0_t.tim0_autoShutOff_lamp>899){//900s =15minute
-        
+          tim0_t.getMinutes15_flag=1;
           tim0_t.tim0_autoShutOff_lamp=0;
-        }
+      }
   
   
 }

@@ -216,7 +216,7 @@ void CheckRun(void)
 				
                     
            }
-		 EUSART_TxData(0X01);
+		 EUSART_TxData(0x01);
          DELAY_microseconds(5);
            firstflag=0;
            
@@ -258,20 +258,24 @@ void CheckRun(void)
 }
 void EUSART_InputCmd_Run(void)
 {
-	
-
 	if(run_t.InputOrder[0]=='W'){
 		
+		ADP_5V_EN_SetHigh(); //works
+		ADP_12V_EN_SetLow(); //stop
 		BatteryWorks_Status();//ChargingBattery_Status();
 		//TX1REG = 'W';
 	}	
 	else if(run_t.InputOrder[0]=='T'){
-		  ChargingBattery_Status();
+		ADP_5V_EN_SetHigh(); //works
+		ADP_12V_EN_SetLow(); //stop
+		 ChargingBattery_Status();
 		 // TX1REG = 'T';
 		
 	}
    else if(run_t.InputOrder[0]=='A'){
 		
+		ADP_12V_EN_SetHigh(); //works
+		ADP_5V_EN_SetHigh(); //STOP
 		AdapterWorks_Status();
 		//TX1REG = 'A';
 	}

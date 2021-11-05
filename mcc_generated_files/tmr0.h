@@ -74,15 +74,15 @@
 
 typedef struct{
 
+    
     uint8_t tim0_falg;
     uint8_t tim0_fun_30s;
     uint8_t tim0_noBatt_s;
     uint8_t tim0_FunStart_flag;
+    uint8_t getMinutes15_flag;
     uint8_t tim0_lowVoltage_flag;
     uint16_t tim0_autoShutOff_lamp;
-   
-
-
+    
 }TIM0_T;
 
 extern TIM0_T tim0_t;
