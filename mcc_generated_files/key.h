@@ -10,7 +10,7 @@
 #define KEY_WHITE()					PORTAbits.RA3
 #define KEY_ADD()					PORTAbits.RA4
 #define KEY_SUB()					PORTAbits.RA5
-#define KEY_POWER()                 PORTAbits.RA6  //POWER -KEY INPUT-new PCB
+//#define KEY_POWER()                 PORTAbits.RA6  //POWER -KEY INPUT-new PCB
 
 uint8_t   KEY_Scan(void);
 

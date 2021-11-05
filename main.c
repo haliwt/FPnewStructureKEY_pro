@@ -102,7 +102,7 @@ void main(void)
                   if(tm<5){
                     run_t.eusartTx_flag=0;
                     run_t.eusartTx_Num=0;
-                    EUSART_TxData(0xff);
+                    EUSART_CommandTxData(0xff);
                   }
                   if(tm >5)tm=7;
 

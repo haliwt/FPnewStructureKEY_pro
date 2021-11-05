@@ -1,6 +1,6 @@
 #include "run.h"
-static void BatteryWorks_Status(void);
-static void ChargingBattery_Status(void);
+
+
 static void AdapterWorks_Status(void);
 /***************************************************************************
 	*
@@ -24,22 +24,7 @@ void CheckMode(uint8_t keyvalue)
 		
 	   break;
 	   
-	   case 0x40: //POWER ON and off
-	          powerFirst_flag = powerFirst_flag ^ 0x1;
-	          if(powerFirst_flag ==1){
-				  
-				  return ;
-				  
-			  }
-			  else{
-			  
-	            run_t.Power_On=0;
-				run_t.lampColor = 0x40;
-				 run_t.eusartTx_flag=0;
-		         run_t.eusartTx_Num=0;	
-	          }
-					
-	  break;
+	
    
 	  case 0x1: //KEY_WHITE
 	  
@@ -155,7 +140,7 @@ void CheckRun(void)
 				firstflag =1;
 			}
            
-            EUSART_TxData(0x52);
+            EUSART_CommandTxData(0x52);
             
      break;
 
@@ -165,7 +150,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =2;
 		}
-		 EUSART_TxData(0x47);
+		 EUSART_CommandTxData(0x47);
 	    
 
 	break;
@@ -176,7 +161,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =3;
 		}
-		 EUSART_TxData(0x42);
+		 EUSART_CommandTxData(0x42);
 
 	break;
 
@@ -186,7 +171,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =4;
 		 }
-		 EUSART_TxData(0x57);
+		 EUSART_CommandTxData(0x57);
      
 	break;
 
@@ -200,7 +185,7 @@ void CheckRun(void)
                     
                }
 			 DELAY_microseconds(5);
-			 EUSART_TxData(0X02);
+			 EUSART_BightnessTxData(0X32);
                firstflag=0;
              
                
@@ -216,7 +201,7 @@ void CheckRun(void)
 				
                     
            }
-		 EUSART_TxData(0x01);
+		 EUSART_BightnessTxData(0x31);
          DELAY_microseconds(5);
            firstflag=0;
            
@@ -232,21 +217,21 @@ void CheckRun(void)
 				
 				firstflag =5;
 		 }
-		 EUSART_TxData(0X3f);
+		 EUSART_CommandTxData(0X3f);
          DELAY_microseconds(10);
 	  
 	
 	break;
 	
-	case 0x40: //power off
-	    if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==4||firstflag==5){
-				run_t.eusartTx_flag=0;
-				run_t.eusartTx_Num=0;
-				firstflag =6;
-		 }
-		 TxData_PowerOff();
+	// case 0x40: //power off
+	//     if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==4||firstflag==5){
+	// 			run_t.eusartTx_flag=0;
+	// 			run_t.eusartTx_Num=0;
+	// 			firstflag =6;
+	// 	 }
+	// 	 TxData_PowerOff();
 	
-	break;
+	// break;
 	
 	default:
     
@@ -260,249 +245,22 @@ void EUSART_InputCmd_Run(void)
 {
 	if(run_t.InputOrder[0]=='W'){
 		
-		ADP_5V_EN_SetHigh(); //works
-		ADP_12V_EN_SetLow(); //stop
-		BatteryWorks_Status();//ChargingBattery_Status();
+		
+	
 		//TX1REG = 'W';
 	}	
 	else if(run_t.InputOrder[0]=='T'){
-		ADP_5V_EN_SetHigh(); //works
-		ADP_12V_EN_SetLow(); //stop
-		 ChargingBattery_Status();
+	
+		 
 		 // TX1REG = 'T';
 		
 	}
    else if(run_t.InputOrder[0]=='A'){
 		
-		ADP_12V_EN_SetHigh(); //works
-		ADP_5V_EN_SetHigh(); //STOP
-		AdapterWorks_Status();
+	
+		
 		//TX1REG = 'A';
 	}
-	
-}
-static void BatteryWorks_Status(void)
-{
-	switch(run_t.InputOrder[1]){
-
-         case 0x1://detected low votlage don't run
-			   if(tim0_t.tim0_falg >49){
-					LED_40_SetHigh() ;
-					LED_60_SetHigh();
-					LED_80_SetHigh();
-					LED_100_SetHigh();
-					if(tim0_t.tim0_falg >99)
-						tim0_t.tim0_falg = 0;
-				}
-				else{
-					LED_100_SetLow() ;
-					LED_40_SetLow();
-					LED_60_SetLow();
-					LED_80_SetLow();
-		
-				}
-			
-		 
-		 break;
-
-		 case 0x2: //60% battery power
-	
-			LED_40_SetLow() ;
-			
-			LED_60_SetHigh();
-		    LED_80_SetHigh();
-			LED_100_SetHigh();
-         
-		 break;
-
-		 case 0x3://80%
-		
-			LED_60_SetLow() ;
-			
-			LED_40_SetLow() ;
-		
-		    LED_80_SetHigh();
-			LED_100_SetHigh();
-
-		 break;
-
-		 case 0x4: //90%
-	
-			LED_80_SetLow() ;
-
-		   
-			LED_40_SetLow() ;
-			LED_60_SetLow();
-			LED_100_SetHigh();
-			
-		 
-
-		 break;
-
-		 case 0X5: //100% WT.EDIT 2021.09.23
-		
-			LED_100_SetLow() ;
-            
-			LED_40_SetLow() ;
-			LED_60_SetLow();
-			LED_80_SetLow();
-			
-		 break;
-		 
-		case 0x6:
-		
-		    LED_100_SetLow() ;
-		    LED_40_SetLow();
-			LED_60_SetLow();
-		    LED_80_SetLow();
-		    
-		
-		break;
-
-		
-
-		 default :
-		 	 
-
-		 break;
-
-
-
-    }
-	
-	
-}
-static void ChargingBattery_Status(void)
-{
-	switch(run_t.InputOrder[1]){
-
-         case 0x1://detected low votlage don't run
-			   if(tim0_t.tim0_falg >49){
-					LED_40_SetHigh() ;
-					LED_60_SetHigh();
-					LED_80_SetHigh();
-					LED_100_SetHigh();
-					if(tim0_t.tim0_falg >99)
-						tim0_t.tim0_falg = 0;
-				}
-				else{
-					LED_100_SetLow() ;
-					LED_40_SetLow();
-					LED_60_SetLow();
-					LED_80_SetLow();
-		
-				}
-			
-		 
-		 break;
-
-		 case 0x2: //60% battery power
-		    if(run_t.batteryStatus==1){
-				if(tim0_t.tim0_falg >49){
-					LED_40_SetHigh() ;
-					if(tim0_t.tim0_falg >99)
-						tim0_t.tim0_falg = 0;
-				}
-				else{
-					LED_40_SetLow() ;
-		
-				}
-			}
-			else{
-			    LED_40_SetLow() ;
-			}
-			LED_60_SetHigh();
-		    LED_80_SetHigh();
-			LED_100_SetHigh();
-         
-		 break;
-
-		 case 0x3://80%
-			 if(run_t.batteryStatus==1){
-					if(tim0_t.tim0_falg >49){
-						LED_60_SetHigh() ;
-						if(tim0_t.tim0_falg >99)
-							tim0_t.tim0_falg = 0;
-					}
-					else{
-						LED_60_SetLow() ;
-					
-				}
-			}
-			else{
-			    LED_60_SetLow() ;
-			}
-			LED_40_SetLow() ;
-		
-		    LED_80_SetHigh();
-			LED_100_SetHigh();
-
-		 break;
-
-		 case 0x4: //90%
-			 if(run_t.batteryStatus==1){
-				if(tim0_t.tim0_falg >49){
-					LED_80_SetHigh() ;
-					if(tim0_t.tim0_falg >99)
-						tim0_t.tim0_falg = 0;
-				}
-				else{
-					LED_80_SetLow() ;
-				}
-		   }
-		   else{
-				LED_80_SetLow() ;
-
-		   }
-			LED_40_SetLow() ;
-			LED_60_SetLow();
-			LED_100_SetHigh();
-			
-		 
-
-		 break;
-
-		 case 0X5: //100% WT.EDIT 2021.09.23
-			 if(run_t.batteryStatus==1){
-				if(tim0_t.tim0_falg >49){
-					LED_100_SetHigh() ;
-					if(tim0_t.tim0_falg >99)
-						tim0_t.tim0_falg = 0;
-				}
-				else{
-					LED_100_SetLow() ;
-				}
-		   }
-		   else{
-				LED_100_SetLow() ;
-            }
-			LED_40_SetLow() ;
-			LED_60_SetLow();
-			LED_80_SetLow();
-			
-		 break;
-		 
-		case 0x6:
-		
-		    LED_100_SetLow() ;
-		    LED_40_SetLow();
-			LED_60_SetLow();
-		    LED_80_SetLow();
-		    
-		
-		break;
-
-		
-
-		 default :
-		 	 
-
-		 break;
-
-
-
-    }
-	
 	
 }
 static void AdapterWorks_Status(void)
