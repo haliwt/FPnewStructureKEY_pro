@@ -139,7 +139,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =1;
 			}
-           
+           DELAY_microseconds(5);
             EUSART_CommandTxData(0x52);
             
      break;
@@ -150,6 +150,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =2;
 		}
+	    DELAY_microseconds(5);
 		 EUSART_CommandTxData(0x47);
 	    
 
@@ -161,7 +162,9 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =3;
 		}
+		DELAY_microseconds(5);
 		 EUSART_CommandTxData(0x42);
+			
 
 	break;
 
@@ -171,6 +174,7 @@ void CheckRun(void)
 				run_t.eusartTx_Num=0;
 				firstflag =4;
 		 }
+		DELAY_microseconds(5);
 		 EUSART_CommandTxData(0x57);
      
 	break;
@@ -188,10 +192,7 @@ void CheckRun(void)
 			 EUSART_BightnessTxData(0X32);
                firstflag=0;
              
-               
-	      
-
-	break;
+    break;
 
 	case 0x10: //KEY_SUB "-"
 	    if(run_t.SUB_flag==1){
@@ -205,10 +206,7 @@ void CheckRun(void)
          DELAY_microseconds(5);
            firstflag=0;
            
-              
-         
-		
-	break;
+    break;
 	
 	case 0x80: //lamp off
 	     if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==4){
