@@ -87,6 +87,7 @@ void TMR0_Initialize(void)
 
     // T0OUTPS 1:5; T0EN enabled; T016BIT 8-bit; 
     T0CON0 = 0x84;
+    TMR0_StartTimer();
 }
 
 void TMR0_StartTimer(void)
@@ -162,7 +163,7 @@ static void TMR0_UserHandler(void)
         temp_5s=0;
         tim0_t.tim0_noBatt_s++;
         tim0_t.tim0_autoShutOff_lamp++;
-        tim0_t.tim0_lowVoltage_flag++;
+        tim0_t.tim0_30s++;
 
      }
       

@@ -80,7 +80,7 @@ typedef struct{
     uint8_t tim0_noBatt_s;
     uint8_t tim0_FunStart_flag;
     uint8_t getMinutes15_flag;
-    uint8_t tim0_lowVoltage_flag;
+    uint8_t tim0_30s;
     uint16_t tim0_autoShutOff_lamp;
     
 }TIM0_T;

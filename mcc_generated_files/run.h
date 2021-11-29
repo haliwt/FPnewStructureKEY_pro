@@ -1,6 +1,6 @@
 #ifndef __RUN_H__
 #define __RUN_H__
-#include "mcc.h"
+#include "../mcc_generated_files/mcc.h"
 #include"delay.h"
 
 
@@ -13,6 +13,7 @@ typedef struct {
    uint8_t ADD_flag;
    uint8_t SUB_flag;
    uint8_t batteryStatus;
+   uint8_t autoShutOff_flag;
    uint8_t InputOrder[2];
  }RUN_T;
 

@@ -20,13 +20,8 @@ void CheckMode(uint8_t keyvalue)
 
 	     if(!keyvalue)
 		  	return ;
-		  
-		
-	   break;
-	   
-	
-   
-	  case 0x1: //KEY_WHITE
+		break;
+	   case 0x1: //KEY_WHITE
 	  
 	        inputkey_white = inputkey_white ^ 0x01;
 	        if(inputkey_white ==1){
@@ -114,6 +109,7 @@ void CheckMode(uint8_t keyvalue)
    				
 	   break;
    }
+	tim0_t.tim0_30s =0;
 }
 /**************************************************************
 	*
@@ -125,7 +121,8 @@ void CheckMode(uint8_t keyvalue)
 **************************************************************/
 void CheckRun(void)
 {
-    static uint8_t firstflag;
+    
+	static uint8_t firstflag;
 	switch(run_t.lampColor){
 	case 0: //turn off lamp 
 		
@@ -133,14 +130,14 @@ void CheckRun(void)
 	break;
 
     case Red: //KEY_RED
-        
+         
 	      if(firstflag==0 || firstflag ==4 || firstflag ==2||firstflag ==3||firstflag==5){
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
 				firstflag =1;
 			}
            DELAY_microseconds(5);
-            EUSART_CommandTxData(0x52);
+           EUSART_CommandTxData(0x52);
             
      break;
 
@@ -237,7 +234,7 @@ void CheckRun(void)
 	break;
 
    }
-
+    tim0_t.tim0_30s =0;
 }
 void EUSART_InputCmd_Run(void)
 {

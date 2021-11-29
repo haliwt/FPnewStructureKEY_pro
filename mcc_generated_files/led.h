@@ -25,12 +25,12 @@
 
 typedef enum{
 
-    battery_20,
-	battery_40,  //
-	battery_60,
-	battery_80,
-	battery_100,
-	battery_full
+    battery_20=20,
+	battery_40=40,  //
+	battery_60=60,
+	battery_80=80,
+	battery_100=100,
+	battery_full=110
 
 }battery_id;
 
@@ -40,7 +40,7 @@ typedef struct{
    uint8_t gbatteryQuantity;   //0 -> charging battery , 1-> don't chanrging battery
    uint8_t Power_On;
    uint8_t switch_dev; //0 -> has battery  1-> han't battery
-   
+   uint8_t Ledblink_flag;
 	
 }LED_T;
 

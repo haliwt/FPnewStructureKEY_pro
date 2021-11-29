@@ -65,13 +65,13 @@ void PIN_MANAGER_Initialize(void)
     TRISx registers
     */
     TRISA = 0xFF;
-    TRISB = 0xFC; //0B 1111 1100  //RB2 ->Analog
-    TRISC = 0xB0; //0B 1011 0000
+    TRISB = 0xFC; //0B 1111 1100  //RB2 ->Analog,
+    TRISC = 0xB0; //0B 1011 0000  //RC4-detect adapter
 
     /**
     ANSELx registers
     */
-    ANSELC = 0x70; //0B 0111 0000
+    ANSELC = 0x60; //0B 0110 0000 //RC4 
     ANSELB = 0xF0; //0B 1111 0100 //RB2 ->analog input
     ANSELA = 0x80;
 

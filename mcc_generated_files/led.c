@@ -40,7 +40,7 @@ static void LEDDispalayBattery_Power(battery_id batid)
 		 break;
 
 		 case battery_40: //40% battery power
-		    if(led_t.gbatteryQuantity==1){
+		    if(led_t.gbatteryQuantity==1 &&  led_t.Ledblink_flag ==1){
 				if(tim0_t.tim0_falg >49){
 					LED_40_SetHigh() ;
 					if(tim0_t.tim0_falg >99)
@@ -61,7 +61,7 @@ static void LEDDispalayBattery_Power(battery_id batid)
 		 break;
 
 		 case battery_60:
-			if(led_t.gbatteryQuantity==1){
+			if(led_t.gbatteryQuantity==1 &&  led_t.Ledblink_flag ==1){
 					if(tim0_t.tim0_falg >49){
 						LED_60_SetHigh() ;
 						if(tim0_t.tim0_falg >99)
@@ -83,7 +83,7 @@ static void LEDDispalayBattery_Power(battery_id batid)
 		 break;
 
 		 case battery_80:
-			if(led_t.gbatteryQuantity==1){
+			if(led_t.gbatteryQuantity==1 &&  led_t.Ledblink_flag ==1){
 				if(tim0_t.tim0_falg >49){
 					LED_80_SetHigh() ;
 					if(tim0_t.tim0_falg >99)
@@ -106,7 +106,7 @@ static void LEDDispalayBattery_Power(battery_id batid)
 		 break;
 
 		 case battery_100: //WT.EDIT 2021.09.23
-			if(led_t.gbatteryQuantity==1){
+			if(led_t.gbatteryQuantity==1 &&  led_t.Ledblink_flag ==1){
 				if(tim0_t.tim0_falg >49){
 					LED_100_SetHigh() ;
 					if(tim0_t.tim0_falg >99)
@@ -159,26 +159,39 @@ static void LEDDispalayBattery_Power(battery_id batid)
 **************************************************************/
 void DisplayBattery_Power_Estimate(void)
 {
-   
-   if(adc_t.adcValue < 37 ){ //half of battery value 37*2=7.4v
-		LEDDispalayBattery_Power(0X28);//(battery_40);
+    if(adc_t.adcValue < 35  ){ //half of battery value 37*2=7.4v
+		LEDDispalayBattery_Power(20);//(battery_20);
+
+   }
+   else if(adc_t.adcValue < 37  && adc_t.adcValue >=35){ //half of battery value 37*2=7.4v
+		LEDDispalayBattery_Power(40);//(battery_40);
 
    }
    else if(adc_t.adcValue >=37 && adc_t.adcValue <39){ // 39*2=7.8V
-	   LEDDispalayBattery_Power(0x3c);//(battery_60);
+	   LEDDispalayBattery_Power(60);//(battery_60);
 
    }
    else if(adc_t.adcValue >=39 && adc_t.adcValue <41){//
-		 LEDDispalayBattery_Power(0x50);//(battery_80);
+		 LEDDispalayBattery_Power(80);//(battery_80);
 
    }
    else if(adc_t.adcValue >=41 && adc_t.adcValue < 42 ){
-		 LEDDispalayBattery_Power(0x5A);//(battery_90);
+		 LEDDispalayBattery_Power(90);//(battery_90);
 
    }
-   else if(adc_t.adcValue >=42){
-	    LEDDispalayBattery_Power(0x64);//(battery_100);
+   else if(adc_t.adcValue ==42){
+	    LEDDispalayBattery_Power(100);//(battery_100);
 	}
+    else if(adc_t.adcValue >42){
+	    LEDDispalayBattery_Power(110);//(battery_100);
+	}
+  
+		
+	
+
+
+
+    
  }  
 /**************************************************************
 	*
@@ -191,7 +204,7 @@ void DisplayBattery_Power_Estimate(void)
 void Battery_Detected(void)
 {
 	ADC_Battery_ConversionValue_Voltage();
-	if(adc_t.adcValue > 10 ){ //2V -> has a battery
+	if(adc_t.adcValue > 20 ){ //2V -> has a battery
 		 
 		 led_t.gbatteryQuantity =1;
 		
@@ -215,11 +228,16 @@ void Adapter_Indicator(void)
 
 void TurnOff_Lamp(void)
 {
+	
 	LED_40_SetHigh();
 	LED_60_SetHigh();
 	LED_80_SetHigh();
 	LED_100_SetHigh();
-	
+	if(run_t.autoShutOff_flag==0){
+		run_t.eusartTx_flag=0;
+		run_t.eusartTx_Num=0;
+		run_t.autoShutOff_flag++;
+	}
 	
 }
 
