@@ -41,7 +41,7 @@
     SOFTWARE.
 */
 
-#include "mcc_generated_files/mcc.h"
+#include "../FP_newStructure_2_KEY_codes.X/mcc_generated_files/mcc.h"
 
 /*
                          Main application
@@ -87,56 +87,60 @@ void main(void)
        if(Adapter_DetectedGetValue() ==1){//don't has Adapter 
                led_t.Ledblink_flag =0;
                 if(led_t.switch_dev==0 ){ //Display Battery of capacity
-                  if(tim0_t.tim0_noBatt_s>120 ){
+                    Battery_Detected(); //
+                        if(led_t.gbatteryQuantity==1){
+                             //DisplayBattery_Power_Estimate();
+                             NoCharingBattery_Estimate();
+                        }
+                    
+                  if(tim0_t.tim0_noBatt_s>60 ){
                        led_t.switch_dev++;
                         Battery_Detected(); //
                         if(led_t.gbatteryQuantity==1)
-                             DisplayBattery_Power_Estimate();
-                        }  
-                       
-                }
-                        Battery_Detected(); //
-                        if(led_t.gbatteryQuantity==1){
-                             DisplayBattery_Power_Estimate();
-                        }
-                        else{
-                            Adapter_Indicator();
-                        }
-                         
-                if(tim0_t.tim0_noBatt_s>240){ //4 minute
+                            NoCharingBattery_Estimate();
+                        } 
+        
+                  }
+                  if(tim0_t.tim0_noBatt_s>240){ //4 minute
                     tim0_t.tim0_noBatt_s=0; 
                     Battery_Detected(); //  
                   if(led_t.gbatteryQuantity ==1){//has a battery + charing     
-                     DisplayBattery_Power_Estimate();
-                  }
-                  else{
-                       Adapter_Indicator();
-                  }
-             
-                }    
+                      NoCharingBattery_Estimate();//DisplayBattery_Power_Estimate();
+                    }
+                 }    
         }
-        else{ // hasn't adapter only battery works
+       else{ // has Adapter 
            led_t.Ledblink_flag =1;
             if(led_t.switch_dev==0 ){ //Display Battery of capacity
+                 Battery_Detected(); //
+                        if(led_t.gbatteryQuantity==1){
+                             DisplayBattery_Power_Estimate();
+                        }
+                        else{
+                            Adapter_Indicator();
+                   }
                   if(tim0_t.tim0_noBatt_s>120 ){
                        led_t.switch_dev++;
                        Battery_Detected(); //    
-                       DisplayBattery_Power_Estimate();
-                       tim0_t.tim0_30s =0;
-                  }
-                    
-              }
-                       Battery_Detected(); //
                         if(led_t.gbatteryQuantity==1){
                              DisplayBattery_Power_Estimate();
                         }
                         else{
                             Adapter_Indicator();
                         }
+                       tim0_t.tim0_30s =0;
+                  }
+               }
+                      
               if(tim0_t.tim0_noBatt_s>180){  //180s detected battery qunantity and update LED 
                   tim0_t.tim0_noBatt_s=0;
                   Battery_Detected(); //   
-                  DisplayBattery_Power_Estimate();
+                   if(led_t.gbatteryQuantity==1){
+                             DisplayBattery_Power_Estimate();
+                        }
+                        else{
+                            Adapter_Indicator();
+                        }
                  tim0_t.tim0_30s =0;
               }
           }

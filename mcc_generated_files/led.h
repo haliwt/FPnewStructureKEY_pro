@@ -59,7 +59,7 @@ void Battery_Detected(void);
 void Adapter_Indicator(void);
 
 void TurnOff_Lamp(void);
-
+void NoCharingBattery_Estimate(void);
 
 
 
