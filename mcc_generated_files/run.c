@@ -28,11 +28,13 @@ void CheckMode(uint8_t keyvalue)
 	            run_t.lampColor=White;
 	            inputkey_green=0;
 	            inputkey_blue=0;
-	             inputkey_red=0;
+	            inputkey_red=0;
+                run_t.gWhite_key++;
 	        }
 	        else{
 	             
-	           run_t.lampColor = 0x80;   
+	           run_t.lampColor = 0x80;  
+               run_t.gPower_id++;
 	        
 	        }
             DELAY_microseconds(10) ;
@@ -46,9 +48,11 @@ void CheckMode(uint8_t keyvalue)
 			     inputkey_white=0;
 			     inputkey_blue=0;
 			      inputkey_red=0;
+                  run_t.gGreen_key++;
 			}
 			else{
-				 run_t.lampColor = 0x80;   
+				 run_t.lampColor = 0x80;  
+                 run_t.gPower_id++;
 			}
 			DELAY_microseconds(10) ;
 			 
@@ -61,9 +65,11 @@ void CheckMode(uint8_t keyvalue)
 				     inputkey_white=0;
 				     inputkey_green=0;
 				     inputkey_red=0;
+                     run_t.gBlue_key++;
 				}
 				else{
-				    run_t.lampColor = 0x80;   
+				    run_t.lampColor = 0x80;
+                    run_t.gPower_id++;
 			    }
 			    
 				DELAY_microseconds(10) ;
@@ -77,9 +83,11 @@ void CheckMode(uint8_t keyvalue)
                      inputkey_blue=0;
                      inputkey_white=0;
 				     inputkey_green=0;
+                     run_t.gRed_key++;
                 }
                 else{
-				    run_t.lampColor = 0x80;   
+				    run_t.lampColor = 0x80; 
+                    run_t.gPower_id++;
 			     }
 				DELAY_microseconds(10) ;
 	  break;
@@ -124,7 +132,7 @@ void CheckRun(void)
     
 	static uint8_t firstflag_red=0xff,firstflag_green=0xff,firstflag_blue=0xff,firstflag_white=0xff,
 	               firstflag_power;
-	static uint8_t red_id,green_id,blue_id,white_id,power_id;
+//	static uint8_t red_id,green_id,blue_id,white_id,power_id;
 	switch(run_t.lampColor){
 	case 0: //turn off lamp 
 		
@@ -133,15 +141,10 @@ void CheckRun(void)
 
     case Red: //KEY_RED
          
-	      if(firstflag_red != red_id){
-			    firstflag_red = red_id;
+	      if(firstflag_red != run_t.gRed_key){
+			    firstflag_red = run_t.gRed_key;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				green_id =0;
-				blue_id=0;
-				white_id=0;
-				power_id=0;
-				
 			}
           
            EUSART_CommandTxData(0x52);
@@ -150,17 +153,11 @@ void CheckRun(void)
      break;
 
 	case Green: //KEY_GREEN
-	  if(firstflag_green !=green_id){
-		        firstflag_green = green_id;
+	  if(firstflag_green !=run_t.gGreen_key){
+		        firstflag_green = run_t.gGreen_key;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				red_id =0;
-				blue_id=0;
-				white_id=0;
-				power_id=0;
-				
 		}
-	  
 		EUSART_CommandTxData(0x47);
 		 DELAY_microseconds(5);
 	    
@@ -168,16 +165,11 @@ void CheckRun(void)
 	break;
 
 	case Blue://KEY_BLUE
-	    if(firstflag_blue !=blue_id){
-			    firstflag_blue = blue_id;
+	    if(firstflag_blue !=run_t.gBlue_key){
+			    firstflag_blue = run_t.gBlue_key;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				green_id =0;
-				red_id=0;
-				white_id=0;
-				power_id=0;
-				
-		}
+        }
 		
 		EUSART_CommandTxData(0x42);
 		 DELAY_microseconds(5);
@@ -186,14 +178,11 @@ void CheckRun(void)
 	break;
 
 	case White://KEY_WHITE
-	    if(firstflag_white != white_id){
-			    firstflag_white = white_id;
+	    if(firstflag_white != run_t.gWhite_key){
+			    firstflag_white = run_t.gWhite_key;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				green_id =0;
-				blue_id=0;
-				red_id=0;
-				power_id=0;
+			
 			
 		 }
 		
@@ -233,17 +222,12 @@ void CheckRun(void)
     break;
 	
 	case 0x80: //lamp off
-	     if(firstflag_power !=power_id){
-			    firstflag_power = power_id;
+	     if(firstflag_power !=run_t.gPower_id){
+			    firstflag_power = run_t.gPower_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				green_id =0;
-				blue_id=0;
-				white_id=0;
-				red_id=0;
-				
 			
-		 }
+		}
 		 EUSART_CommandTxData(0X3f);
          DELAY_microseconds(5);
 	  

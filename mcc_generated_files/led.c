@@ -32,6 +32,9 @@ static void ChargingBattery_BlinkPower(battery_id batid)
 					
 		
 				}
+            LED_60_SetHigh();
+		    LED_80_SetHigh();
+			LED_100_SetHigh();
 			
 		 
 		 break;
@@ -163,6 +166,9 @@ static void NoCharingBattery_Power(battery_id batid)
 	
 					LED_40_SetLow();
 				}
+                LED_60_SetHigh();
+		    LED_80_SetHigh();
+			LED_100_SetHigh();
 			
 		 
 		 break;

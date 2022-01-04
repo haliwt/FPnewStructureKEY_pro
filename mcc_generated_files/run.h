@@ -14,6 +14,11 @@ typedef struct {
    uint8_t SUB_flag;
    uint8_t batteryStatus;
    uint8_t autoShutOff_flag;
+   uint8_t gRed_key;
+   uint8_t gGreen_key;
+   uint8_t gBlue_key;
+   uint8_t gWhite_key;
+   uint8_t gPower_id;
    uint8_t InputOrder[2];
  }RUN_T;
 
