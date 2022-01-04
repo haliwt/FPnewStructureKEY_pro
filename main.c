@@ -74,83 +74,66 @@ void main(void)
        // Add your application code
        if(tim0_t.getMinutes15_flag ==1){ 
                 led_t.minute15_flag =1;
+                led_t.gStop=1;
                 TurnOff_Lamp();
                 EUSART_CommandTxData(0x3f);
                   
              if(tim0_t.tim0_30s >30){
                     run_t.autoShutOff_flag=0;
                     tim0_t.getMinutes15_flag =0;
+                    led_t.gStop=0;
               }
 
        }
        else{
-       if(Adapter_DetectedGetValue() ==1){//don't has Adapter 
-               led_t.Ledblink_flag =0;
-                if(led_t.switch_dev==0 ){ //Display Battery of capacity
-                    Battery_Detected(); //
-                        if(led_t.gbatteryQuantity==1){
-                             //DisplayBattery_Power_Estimate();
-                             NoCharingBattery_Estimate();
-                        }
-                    
-                  if(tim0_t.tim0_noBatt_s>60 ){
-                       led_t.switch_dev++;
-                        Battery_Detected(); //
-                        if(led_t.gbatteryQuantity==1)
-                            NoCharingBattery_Estimate();
-                        } 
-        
-                  }
-                  if(tim0_t.tim0_noBatt_s>240){ //4 minute
-                    tim0_t.tim0_noBatt_s=0; 
-                    Battery_Detected(); //  
-                  if(led_t.gbatteryQuantity ==1){//has a battery + charing     
-                      NoCharingBattery_Estimate();//DisplayBattery_Power_Estimate();
-                    }
-                 }    
-        }
-       else{ // has Adapter 
-           led_t.Ledblink_flag =1;
-            if(led_t.switch_dev==0 ){ //Display Battery of capacity
-                 Battery_Detected(); //
-                        if(led_t.gbatteryQuantity==1){
-                             DisplayBattery_Power_Estimate();
-                        }
-                        else{
-                            Adapter_Indicator();
-                   }
-                  if(tim0_t.tim0_noBatt_s>120 ){
-                       led_t.switch_dev++;
-                       Battery_Detected(); //    
-                        if(led_t.gbatteryQuantity==1){
-                             DisplayBattery_Power_Estimate();
-                        }
-                        else{
-                            Adapter_Indicator();
-                        }
-                       tim0_t.tim0_30s =0;
-                  }
-               }
+        if(Adapter_DetectedGetValue() ==1){//don't has Adapter 
+                led_t.gCharging=0; 
+                  if(led_t.switch_dev==0 ){ // if not has battery ?
+                      Battery_Detected(); //
+                          if(led_t.gbatteryQuantity==1){ //YES has battery
+                             
+                              NoCharingBattery_Estimate();
+                          }
                       
-              if(tim0_t.tim0_noBatt_s>180){  //180s detected battery qunantity and update LED 
-                  tim0_t.tim0_noBatt_s=0;
-                  Battery_Detected(); //   
-                   if(led_t.gbatteryQuantity==1){
-                             DisplayBattery_Power_Estimate();
-                        }
-                        else{
-                            Adapter_Indicator();
-                        }
-                 tim0_t.tim0_30s =0;
-              }
+                       if(tim0_t.tim0_noBatt_s>60 ){
+                            led_t.switch_dev++;
+                             Battery_Detected(); //
+                            if(led_t.gbatteryQuantity==1)
+                               NoCharingBattery_Estimate();
+                            } 
+          
+                    }
+                    if(tim0_t.tim0_noBatt_s>120){ //4 minute
+                        tim0_t.tim0_noBatt_s=0; 
+                        Battery_Detected(); //  
+                      if(led_t.gbatteryQuantity ==1){//has a battery
+                          NoCharingBattery_Estimate();
+                      }
+                  }    
           }
-       }
+        else{ // has Adapter 
+            
+            Battery_Detected(); //
+            if(led_t.gbatteryQuantity==1){ //has battery 
+                    led_t.gCharging=1;
+                    CharingBattery_Power_Blink();
+                    
+              }
+            else{ //don't has battery
+                  led_t.gCharging=0; 
+                  Adapter_Indicator();
+              }
+            }
+         }
           keyValue = KEY_Scan();
           CheckMode(keyValue);
           CheckRun();
-          EUSART_SetRxInterruptHandler(RxData_EUSART);
-          EUSART_InputCmd_Run();
-          
+         
+       
+        if( led_t.gCharging==1){
+            CharingBattery_Power_Blink();
+        }
+      
    
        
     }

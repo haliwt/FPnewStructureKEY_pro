@@ -122,7 +122,9 @@ void CheckMode(uint8_t keyvalue)
 void CheckRun(void)
 {
     
-	static uint8_t firstflag;
+	static uint8_t firstflag_red=0xff,firstflag_green=0xff,firstflag_blue=0xff,firstflag_white=0xff,
+	               firstflag_power;
+	static uint8_t red_id,green_id,blue_id,white_id,power_id;
 	switch(run_t.lampColor){
 	case 0: //turn off lamp 
 		
@@ -131,48 +133,72 @@ void CheckRun(void)
 
     case Red: //KEY_RED
          
-	      if(firstflag==0 || firstflag ==4 || firstflag ==2||firstflag ==3||firstflag==5){
+	      if(firstflag_red != red_id){
+			    firstflag_red = red_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				firstflag =1;
+				green_id =0;
+				blue_id=0;
+				white_id=0;
+				power_id=0;
+				
 			}
-           DELAY_microseconds(5);
+          
            EUSART_CommandTxData(0x52);
+		    DELAY_microseconds(5);
             
      break;
 
 	case Green: //KEY_GREEN
-	  if(firstflag==0 || firstflag ==1 || firstflag ==4||firstflag ==3||firstflag==5){
+	  if(firstflag_green !=green_id){
+		        firstflag_green = green_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				firstflag =2;
+				red_id =0;
+				blue_id=0;
+				white_id=0;
+				power_id=0;
+				
 		}
-	    DELAY_microseconds(5);
-		 EUSART_CommandTxData(0x47);
+	  
+		EUSART_CommandTxData(0x47);
+		 DELAY_microseconds(5);
 	    
 
 	break;
 
 	case Blue://KEY_BLUE
-	    if(firstflag==0 || firstflag ==1 || firstflag ==2 ||firstflag==4||firstflag==5){
+	    if(firstflag_blue !=blue_id){
+			    firstflag_blue = blue_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				firstflag =3;
+				green_id =0;
+				red_id=0;
+				white_id=0;
+				power_id=0;
+				
 		}
-		DELAY_microseconds(5);
-		 EUSART_CommandTxData(0x42);
+		
+		EUSART_CommandTxData(0x42);
+		 DELAY_microseconds(5);
 			
 
 	break;
 
 	case White://KEY_WHITE
-	    if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==5){
+	    if(firstflag_white != white_id){
+			    firstflag_white = white_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
-				firstflag =4;
+				green_id =0;
+				blue_id=0;
+				red_id=0;
+				power_id=0;
+			
 		 }
-		DELAY_microseconds(5);
+		
 		 EUSART_CommandTxData(0x57);
+		  DELAY_microseconds(5);
      
 	break;
 
@@ -185,9 +211,10 @@ void CheckRun(void)
 				    
                     
                }
-			 DELAY_microseconds(5);
+			
 			 EUSART_BightnessTxData(0X32);
-               firstflag=0;
+			  DELAY_microseconds(5);
+            
              
     break;
 
@@ -201,39 +228,38 @@ void CheckRun(void)
            }
 		 EUSART_BightnessTxData(0x31);
          DELAY_microseconds(5);
-           firstflag=0;
+           
            
     break;
 	
 	case 0x80: //lamp off
-	     if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==4){
+	     if(firstflag_power !=power_id){
+			    firstflag_power = power_id;
 				run_t.eusartTx_flag=0;
 				run_t.eusartTx_Num=0;
+				green_id =0;
+				blue_id=0;
+				white_id=0;
+				red_id=0;
 				
-				firstflag =5;
+			
 		 }
 		 EUSART_CommandTxData(0X3f);
-         DELAY_microseconds(10);
+         DELAY_microseconds(5);
 	  
 	
 	break;
 	
-	// case 0x40: //power off
-	//     if(firstflag==0 || firstflag ==1 || firstflag ==2||firstflag ==3||firstflag==4||firstflag==5){
-	// 			run_t.eusartTx_flag=0;
-	// 			run_t.eusartTx_Num=0;
-	// 			firstflag =6;
-	// 	 }
-	// 	 TxData_PowerOff();
-	
-	// break;
 	
 	default:
     
 
 	break;
+    
 
    }
+  if(led_t.gCharging==1)
+        //DisplayBattery_Power_Estimate();
     tim0_t.tim0_30s =0;
 }
 void EUSART_InputCmd_Run(void)

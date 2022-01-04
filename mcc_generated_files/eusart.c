@@ -406,7 +406,9 @@ void RxData_EUSART(void)
      PIE3bits.RC1IE = 1; 
      PIE3bits.TX1IE = 1;
       
-    
+     if( led_t.gCharging==1){
+           // DisplayBattery_Power_Estimate();
+       }
     
 }
 /**

@@ -15,7 +15,7 @@
 #define LED_80_SetHigh()            do { LATCbits.LATC1 = 1; } while(0) //LED3
 #define LED_80_SetLow()             do { LATCbits.LATC1 = 0; } while(0)
 
-#define LED_100_SetHigh()            do { LATCbits.LATC0 = 1; } while(0) //LED4
+#define LED_100_SetHigh()            do { LATCbits.LATC0 = 1; } while(0) //LED4->BD4 -RC0
 #define LED_100_SetLow()             do { LATCbits.LATC0 = 0; } while(0)
 
 
@@ -40,13 +40,15 @@ typedef struct{
    uint8_t gbatteryQuantity;   //0 -> charging battery , 1-> don't chanrging battery
    uint8_t Power_On;
    uint8_t switch_dev; //0 -> has battery  1-> han't battery
-   uint8_t Ledblink_flag;
-	
+   uint8_t gStop;
+   uint8_t gCharging; 
+   
 }LED_T;
 
 extern LED_T led_t;
 	
-void DisplayBattery_Power_Estimate(void);
+//void DisplayBattery_Power_Estimate(void);
+void CharingBattery_Power_Blink(void);
 
 void LowVotalge_Detected(void);
 
