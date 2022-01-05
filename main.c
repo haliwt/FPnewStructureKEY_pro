@@ -95,7 +95,7 @@ void main(void)
                               NoCharingBattery_Estimate();
                           }
                       
-                       if(tim0_t.tim0_noBatt_s>60 ){
+                       if(tim0_t.tim0_noBatt_s > 60 ){
                             led_t.switch_dev++;
                              Battery_Detected(); //
                             if(led_t.gbatteryQuantity==1)
@@ -103,7 +103,7 @@ void main(void)
                             } 
           
                     }
-                    if(tim0_t.tim0_noBatt_s>120){ //4 minute
+                    if(tim0_t.tim0_noBatt_s >60){ //4 minute
                         tim0_t.tim0_noBatt_s=0; 
                         Battery_Detected(); //  
                       if(led_t.gbatteryQuantity ==1){//has a battery
@@ -133,10 +133,8 @@ void main(void)
         if( led_t.gCharging==1){
             CharingBattery_Power_Blink();
         }
-      
-   
        
-    }
+       }
     
 }
 /**

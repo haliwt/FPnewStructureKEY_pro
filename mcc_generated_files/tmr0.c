@@ -159,7 +159,7 @@ static void TMR0_UserHandler(void)
     static uint16_t temp_5s,temp;
      tim0_t.tim0_falg ++ ;
      temp_5s++;
-     if(temp_5s >49){ //1s 50*20ms =1000ms
+     if(temp_5s >49){ //1s 50*20ms =1000ms=1s
         temp_5s=0;
         tim0_t.tim0_noBatt_s++;
         tim0_t.tim0_autoShutOff_lamp++;
