@@ -49,8 +49,8 @@
 void main(void)
 {
     // Initialize the device
-    uint8_t keyValue;
-    static uint8_t tm;
+    
+  //  static uint8_t tm;
     SYSTEM_Initialize();
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts
@@ -71,70 +71,9 @@ void main(void)
 
     while (1)
     {
-       // Add your application code
-       if(tim0_t.getMinutes15_flag ==1){ 
-                led_t.minute15_flag =1;
-                led_t.gStop=1;
-                TurnOff_Lamp();
-                EUSART_CommandTxData(0x3f);
-                  
-             if(tim0_t.tim0_30s >30){
-                    run_t.autoShutOff_flag=0;
-                    tim0_t.getMinutes15_flag =0;
-                    led_t.gStop=0;
-              }
-
-       }
-       else{
-        if(Adapter_DetectedGetValue() ==1){//don't has Adapter 
-                led_t.gCharging=0; 
-                  if(led_t.switch_dev==0 ){ // if not has battery ?
-                      Battery_Detected(); //
-                          if(led_t.gbatteryQuantity==1){ //YES has battery
-                             
-                              NoCharingBattery_Estimate();
-                          }
-                      
-                       if(tim0_t.tim0_noBatt_s > 60 ){
-                            led_t.switch_dev++;
-                             Battery_Detected(); //
-                            if(led_t.gbatteryQuantity==1)
-                               NoCharingBattery_Estimate();
-                            } 
-          
-                    }
-                    if(tim0_t.tim0_noBatt_s >60){ //4 minute
-                        tim0_t.tim0_noBatt_s=0; 
-                        Battery_Detected(); //  
-                      if(led_t.gbatteryQuantity ==1){//has a battery
-                          NoCharingBattery_Estimate();
-                      }
-                  }    
-          }
-        else{ // has Adapter 
-            
-            Battery_Detected(); //
-            if(led_t.gbatteryQuantity==1){ //has battery 
-                    led_t.gCharging=1;
-                    CharingBattery_Power_Blink();
-                    
-              }
-            else{ //don't has battery
-                  led_t.gCharging=0; 
-                  Adapter_Indicator();
-              }
-            }
-         }
-          keyValue = KEY_Scan();
-          CheckMode(keyValue);
-          CheckRun();
-         
        
-        if( led_t.gCharging==1){
-            CharingBattery_Power_Blink();
-        }
-       
-       }
+       RunMain();
+    }
     
 }
 /**

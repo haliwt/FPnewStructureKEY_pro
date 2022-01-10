@@ -37,7 +37,7 @@ typedef enum{
 void CheckMode(uint8_t value);
 void CheckRun(void);
 void EUSART_InputCmd_Run(void);
-
+void RunMain(void);
 
 
 

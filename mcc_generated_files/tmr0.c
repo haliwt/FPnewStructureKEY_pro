@@ -153,7 +153,12 @@ void TMR0_DefaultInterruptHandler(void){
     // add your TMR0 interrupt custom code
     // or set custom function using TMR0_SetInterruptHandler()
 }
-
+/*******************************************************************************************************
+ * Section: TMR0 APIs
+ * Tim0 period = 20ms,prescaler = 32 ,postscalare =5
+ * Tosc =1/8MHZ =0.125us ,pre = 32
+ * 8bit :TMR0L = Tim0 period /(pre *post*  Tosc* 10^-3)-1= 20/(32 * 5* 4* 0.125 *10^-3)-1=250-1=249
+*/
 static void TMR0_UserHandler(void)
 {
     static uint16_t temp_5s,temp;

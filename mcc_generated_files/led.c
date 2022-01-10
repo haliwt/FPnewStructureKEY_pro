@@ -290,11 +290,9 @@ void CharingBattery_Power_Blink(void)//void DisplayBattery_Power_Estimate(void)
 void NoCharingBattery_Estimate(void)
 {
      if(adc_t.adcValue < 35  ){ //half of battery value 37*2=7.4v
-		//LEDDispalayBattery_Power(20);//(battery_20);
           NoCharingBattery_Power(20);
    }
    else if(adc_t.adcValue < 37  && adc_t.adcValue >=35){ //half of battery value 37*2=7.4v
-		//LEDDispalayBattery_Power(40);//(battery_40);
         NoCharingBattery_Power(40);
 
    }
@@ -303,19 +301,19 @@ void NoCharingBattery_Estimate(void)
 
    }
    else if(adc_t.adcValue >=39 && adc_t.adcValue <41){//
-		// LEDDispalayBattery_Power(80);//(battery_80);
+		
         NoCharingBattery_Power(80);
    }
    else if(adc_t.adcValue >=41 && adc_t.adcValue < 42 ){
-		// LEDDispalayBattery_Power(90);//(battery_90);
+		
          NoCharingBattery_Power(90);
    }
    else if(adc_t.adcValue ==42){
-	   // LEDDispalayBattery_Power(100);//(battery_100);
+	  
         NoCharingBattery_Power(100);
 	}
     else if(adc_t.adcValue >42){
-	   // LEDDispalayBattery_Power(110);//(battery_100);
+	  
          NoCharingBattery_Power(110);
 	}
 
@@ -334,7 +332,7 @@ void Battery_Detected(void)
     if(adc_t.adcValue>41 && adc_t.adcValue<43){
           led_t.gbatteryQuantity =0;
     }
-	else if(adc_t.adcValue > 30){ //5V -> has a battery
+	else if((adc_t.adcValue > 30) || (adc_t.adcValue <= 25 && adc_t.adcValue >15)){ //5V -> has a 5V adapter don't have PD protocol
 		 
 	  led_t.gbatteryQuantity =1;
 		
